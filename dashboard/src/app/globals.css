@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-display: var(--font-unbounded), var(--font-manrope), system-ui, sans-serif;
+}
+
+/* Large, readable text everywhere: the whole page scales from this one size. */
+html {
+  font-size: 18px;
+  color-scheme: light;
+}
+
+body {
+  background: #f6f7f9;
+  color: #1c2430;
+  font-family: var(--font-manrope), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+/* Unbounded is a wide font, so headings stay modest in size. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-unbounded), var(--font-manrope), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* ---- Motion: short, gentle, and only transform/opacity. Switched off for people who ask for less motion. ---- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes grow-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes pulse-soft {
+  50% { opacity: 0.55; }
+}
+
+/* A page's direct children rise in one after another. */
+.stagger > * {
+  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.stagger > *:nth-child(7) { animation-delay: 360ms; }
+.stagger > *:nth-child(n + 8) { animation-delay: 420ms; }
+
+.fade-in { animation: fade 0.25s ease-out both; }
+.pop-in { animation: pop 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.bar-x { transform-origin: left center; animation: grow-x 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.bar-y { transform-origin: bottom center; animation: grow-y 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.skeleton { animation: pulse-soft 1.4s ease-in-out infinite; background: #e2e8f0; border-radius: 0.75rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger > *,
+  .fade-in,
+  .pop-in,
+  .bar-x,
+  .bar-y,
+  .skeleton {
+    animation: none !important;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md;
+  }
+  .field {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base transition-colors duration-150 focus:border-blue-600;
+  }
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg bg-blue-700 px-4 py-2 font-semibold text-white transition duration-150 hover:bg-blue-800 active:scale-[0.97] disabled:opacity-50;
+  }
+  .btn-quiet {
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-800 transition duration-150 hover:bg-slate-50 active:scale-[0.97] disabled:opacity-50;
+  }
+}
